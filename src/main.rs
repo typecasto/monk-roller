@@ -39,9 +39,8 @@ fn main() -> anyhow::Result<()> {
     }
     // handle the attacks
     for crit in results.iter().cloned().filter_map(|x| x) {
-        // todo!
         let mut dmg = vec![
-            ("", vec![dmg_die, dmg_die]),
+            ("", vec![dmg_die; 3]),
             (" fire", vec![dmg_die]),
             (" electricity", vec![dmg_die]),
         ];
@@ -65,7 +64,7 @@ fn main() -> anyhow::Result<()> {
                 )
             })
             .map(|(ty, mut dice)| {
-                let sum: i32 = dice.clone().sum();
+                let sum: i32 = dice.clone().sum(); // todo uh
                 let first = dice.next().unwrap().to_string();
                 (
                     dice.fold(first, |acc, x| acc + " + " + &x.to_string()) + ty,
@@ -73,6 +72,7 @@ fn main() -> anyhow::Result<()> {
                     ty,
                 )
             })
+            .inspect(|x| println!("{:?}", x))
             .fold(
                 ("".to_string(), "".to_string(), 0),
                 |(short, long, all), (desc, sum, ty)| {
