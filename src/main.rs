@@ -67,23 +67,21 @@ fn main() -> anyhow::Result<()> {
                         .into_iter()
                 )
             })
-            .inspect(|x| println!("{:?}", x))
-            // .collect::<Vec<_>>()
-            // .into_iter()
+            // .inspect(|x| println!("{:?}", x))
             .map(|(ty, mut dice)| {
-                dbg!(&dice.clone().collect::<Vec<_>>());
+                // dbg!(&dice.clone().collect::<Vec<_>>());
                 let sum: i32 = dice.clone().sum(); // todo uh (what did she mean by this???)
                 let first = dice.next().unwrap().to_string();
-                println!("first: {first}");
+                // println!("first: {first}");
                 (
                     dice
-                        .inspect(|x| println!("{:?}", x))
+                        // .inspect(|x| println!("{:?}", x))
                         .fold(first, |acc, x| acc + " + " + &x.to_string()) + ty,
                     sum,
                     ty,
                 )
             })
-            .inspect(|x| println!("{:?}", x))
+            // .inspect(|x| println!("{:?}", x))
             .fold(
                 ("".to_string(), "".to_string(), 0),
                 |(short, long, all), (desc, sum, ty)| {
