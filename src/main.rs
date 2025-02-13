@@ -18,9 +18,11 @@ fn main() -> anyhow::Result<()> {
         .item(-4, "-4", "")
         .item(-8, "-8", "")
         .interact()?;
-    let mut hits = vec![roll("1d20") + ATTACK + map + if buffed { 1 } else { 0 }];
+    let d1: i32 = roll("1d20");
+    let mut hits = vec![(d1 + ATTACK + map + if buffed { 1 } else { 0 }, d1)];
     if fob {
-        hits.push(roll("1d20") + ATTACK + map - 4 + if buffed { 1 } else { 0 })
+        let d2: i32 = roll("1d20");
+        hits.push((d2 + ATTACK + map - 4 + if buffed { 1 } else { 0 }, d2))
     }
     let dmg_die = cc::select("Damage die?")
         .item("1d6", "1d6", "Standard")
@@ -28,9 +30,9 @@ fn main() -> anyhow::Result<()> {
         .item("10", "1d10", "5+ instances of Off-Guard")
         .interact()?;
     let mut results = vec![];
-    for hit in hits {
+    for (hit, roll) in hits {
         results.push(
-            cc::select(format!("Does a {} hit?", hit))
+            cc::select(format!("Does a {} hit? (rolled: {})", hit, roll))
                 .item(Some(false), "Hit", "")
                 .item(None, "Miss", "").initial_value(None)
                 .item(Some(true), "Crit", "")
@@ -60,14 +62,23 @@ fn main() -> anyhow::Result<()> {
                     ty,
                     dice.into_iter()
                         .map(roll)
-                        .map(|x| if crit { x * 2 } else { x }),
+                        .map(|x| if crit { x * 2 } else { x })
+                        .collect::<Vec<_>>() // roll them NOW to collapse the states
+                        .into_iter()
                 )
             })
+            .inspect(|x| println!("{:?}", x))
+            // .collect::<Vec<_>>()
+            // .into_iter()
             .map(|(ty, mut dice)| {
-                let sum: i32 = dice.clone().sum(); // todo uh
+                dbg!(&dice.clone().collect::<Vec<_>>());
+                let sum: i32 = dice.clone().sum(); // todo uh (what did she mean by this???)
                 let first = dice.next().unwrap().to_string();
+                println!("first: {first}");
                 (
-                    dice.fold(first, |acc, x| acc + " + " + &x.to_string()) + ty,
+                    dice
+                        .inspect(|x| println!("{:?}", x))
+                        .fold(first, |acc, x| acc + " + " + &x.to_string()) + ty,
                     sum,
                     ty,
                 )
