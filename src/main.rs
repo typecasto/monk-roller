@@ -3,6 +3,7 @@ use ndm::Dice;
 
 const ATTACK: i32 = 23;
 fn main() -> anyhow::Result<()> {
+    let mut total_dmg = 0;
     ctrlc::set_handler(|| {})?;
     cc::intro("dmg-roll")?;
     let attack_type = cc::select("Attack type?")
@@ -47,6 +48,7 @@ fn main() -> anyhow::Result<()> {
             (" electricity", vec![dmg_die]),
         ];
         match attack_type {
+            // .into_iter()
             "laser" => dmg[1].1.push("2"), // 2 fire
             "fist" => dmg[0].1.push("6"),  // 6 normal
             _ => {}
@@ -71,6 +73,7 @@ fn main() -> anyhow::Result<()> {
             .map(|(ty, mut dice)| {
                 // dbg!(&dice.clone().collect::<Vec<_>>());
                 let sum: i32 = dice.clone().sum(); // todo uh (what did she mean by this???)
+                total_dmg += sum;
                 let first = dice.next().unwrap().to_string();
                 // println!("first: {first}");
                 (
@@ -102,7 +105,7 @@ fn main() -> anyhow::Result<()> {
             &long[1..], // ignore leading \n
         )?;
         if crit {
-            cc::log::info("crit! Deal 1d10 persistent fire damage")?;
+            cc::log::info("crit! Deal 2d10 persistent fire damage")?;
             cc::log::info("crit! Arc electric damage to 2 nearby targets")?;
             if !cc::confirm("crit! Did target succeed a fortitude save vs. your class DC?")
                 .initial_value(true)
@@ -126,6 +129,7 @@ fn main() -> anyhow::Result<()> {
             cc::log::info(format!("Target is stunned {stun} until the end of your next turn."))?;
         }
     }
+    let _ = cc::outro(format!("total dmg: {}", total_dmg));
 
     Ok(())
 }
