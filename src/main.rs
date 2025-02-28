@@ -1,14 +1,14 @@
 use cliclack as cc;
 use ndm::Dice;
 
-const ATTACK: i32 = 23;
+const ATTACK: i32 = 25;
 fn main() -> anyhow::Result<()> {
     let mut total_dmg = 0;
     ctrlc::set_handler(|| {})?;
     cc::intro("dmg-roll")?;
     let attack_type = cc::select("Attack type?")
-        .item("fist", "Powerful Fist", "+23/19/15")
-        .item("laser", "Laser Beam", "+23/19/15")
+        .item("fist", "Powerful Fist", "+25/21/17")
+        .item("laser", "Laser Beam", "+25/21/17")
         .interact()?;
     let buffed = cc::confirm("Inner Upheavel?").interact()?;
     let fob = cc::confirm("Flurry of Blows?")
@@ -49,8 +49,8 @@ fn main() -> anyhow::Result<()> {
         ];
         match attack_type {
             // .into_iter()
-            "laser" => dmg[1].1.push("2"), // 2 fire
-            "fist" => dmg[0].1.push("6"),  // 6 normal
+            "laser" => dmg[1].1.push("3"), // 3 fire
+            "fist" => dmg[0].1.push("9"),  // 6 normal
             _ => {}
         }
         if buffed {
