@@ -45,7 +45,7 @@ fn main() -> anyhow::Result<()> {
         let mut dmg = vec![
             ("", vec![dmg_die; 3]),
             (" fire", vec![dmg_die]),
-            (" electricity", vec![dmg_die]),
+            (" mental", vec![dmg_die]),
         ];
         match attack_type {
             // .into_iter()
@@ -106,7 +106,7 @@ fn main() -> anyhow::Result<()> {
         )?;
         if crit {
             cc::log::info("crit! Deal 2d10 persistent fire damage")?;
-            cc::log::info("crit! Arc electric damage to 2 nearby targets")?;
+            cc::log::info("crit! Target is stupefied 1, and frightened 2 if they were already stupified.")?;
             if !cc::confirm("crit! Did target succeed a fortitude save vs. your class DC?")
                 .initial_value(true)
                 .interact()?
