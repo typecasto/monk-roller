@@ -7,8 +7,8 @@ fn main() -> anyhow::Result<()> {
     ctrlc::set_handler(|| {})?;
     cc::intro("dmg-roll")?;
     let attack_type = cc::select("Attack type?")
-        .item("fist", "Powerful Fist", "+27/23/19")
-        .item("laser", "Laser Beam", "+28/24/20")
+        .item("fist", "Powerful Fist", "+28/24/20")
+        .item("laser", "Laser Beam", "+27/23/19")
         .interact()?;
     let buffed = cc::confirm("Inner Upheavel?").interact()?;
     let fob = cc::confirm("Flurry of Blows?")
@@ -58,8 +58,8 @@ fn main() -> anyhow::Result<()> {
         ];
         match attack_type {
             // .into_iter()
-            "laser" => dmg[1].1.push("6"), // 3 fire
-            "fist" => dmg[0].1.push("12"), // 6 normal
+            "laser" => dmg[1].1.push("6"), // fire
+            "fist" => dmg[0].1.push("13"), // normal
             _ => {}
         }
         if buffed {
