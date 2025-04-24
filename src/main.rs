@@ -36,7 +36,7 @@ fn main() -> anyhow::Result<()> {
     let dmg_die = cc::select("Damage die?")
         .item("1d6", "1d6", "Standard")
         .item("1d8", "1d8", "3-4 instances of Off-Guard")
-        .item("10", "1d10", "5+ instances of Off-Guard")
+        .item("1d10", "1d10", "5+ instances of Off-Guard")
         .interact()?;
     let mut results = vec![];
     for (hit, roll) in hits {
